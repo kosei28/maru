@@ -13,8 +13,8 @@ struct Object {
 }
 
 ///|
-/// Wrap a JSON value so it can be validated while a typed value is built.
-pub fn value(json : Json) -> Value {
+/// Wrap JSON as a `Value` so it can be validated while a typed value is built.
+pub fn from_json(json : Json) -> Value {
   { json, path: Root, }
 }
 

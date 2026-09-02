@@ -8,7 +8,7 @@ A minimal MoonBit validation library that constructs a typed value while validat
 ///|
 test {
   let json : Json = { "name": "Ada", "age": 36 }
-  let obj = @maru.value(json).object()
+  let obj = @maru.from_json(json).object()
   let name = obj.field("name").string().nonempty().value()
   let age = obj.field("age").int().range(0, 150).value()
   assert_eq(name, "Ada")
@@ -23,6 +23,7 @@ test {
 - Keep fetching, type checks, and value checks separate
 - Propagate errors with MoonBit `raise`
 - maru types are thin wrappers that only hold a value and a path
+- Start with `from_json` to wrap JSON as a `Value`
 - Finish with `.value()` to unwrap to a plain MoonBit value
 - Parse unsupported types yourself via `Value::raw()`
 
@@ -33,7 +34,7 @@ Raw `Json`, object fields, and array elements are all the same `Value`.
 ```mbt check
 ///|
 test {
-  let value = @maru.value({ "ok": true })
+  let value = @maru.from_json({ "ok": true })
   assert_eq(value.object().field("ok").bool().value(), true)
 }
 ```
@@ -103,7 +104,7 @@ fn User::parse(value : @maru.Value) -> User raise @maru.Invalid {
 }
 ```
 
-From the top level, call `User::parse(@maru.value(json))`.
+From the top level, call `User::parse(@maru.from_json(json))`.
 
 ## Objects
 
@@ -123,7 +124,7 @@ Checked[String]
 ```mbt check
 ///|
 test {
-  let obj = @maru.value({ "name": "Ada" }).object()
+  let obj = @maru.from_json({ "name": "Ada" }).object()
   let nickname = obj
     .optional_field("nickname")
     .map(v => v.string().max_len(30).value())
@@ -138,7 +139,7 @@ Array elements are `Value`s as well.
 ```mbt check
 ///|
 test {
-  let scores = @maru.value({ "scores": [10.0, 99.5] })
+  let scores = @maru.from_json({ "scores": [10.0, 99.5] })
     .object()
     .field("scores")
     .array()
@@ -155,7 +156,7 @@ test {
 ```mbt check
 ///|
 test {
-  let id = @maru.first_of(@maru.value(7), [
+  let id = @maru.first_of(@maru.from_json(7), [
     v => v.string().value(),
     v => v.int().value().to_string(),
   ])
@@ -168,7 +169,7 @@ nullable values can be written the same way.
 ```mbt check
 ///|
 test {
-  let nickname : String? = @maru.first_of(@maru.value(null), [
+  let nickname : String? = @maru.first_of(@maru.from_json(null), [
     v => { v.null(); None },
     v => Some(v.string().value()),
   ])
@@ -182,6 +183,7 @@ test {
 `Checked[T]` has no `raw()`.
 
 ```text
+from_json(json)    -> Value
 Value.raw()        -> Json
 Checked[T].value() -> T
 ```

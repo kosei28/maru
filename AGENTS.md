@@ -10,6 +10,7 @@ See `README.mbt.md` for the API. Keep the implementation small.
 - No schema-as-value, validator builder, or delayed evaluation
 - Keep fetching, type checks, and value checks separate
 - Wrappers only hold a value and a path
+- Start with `from_json` to wrap JSON as a `Value`
 - Finish with `.value()` to unwrap to a plain MoonBit value
 - Parse unsupported types yourself via `Value::raw()`
 - Raise `@maru.Invalid` on failure (`Error` is reserved in MoonBit)

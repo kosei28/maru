@@ -8,7 +8,7 @@
 ///|
 test {
   let json : Json = { "name": "Ada", "age": 36 }
-  let obj = @maru.value(json).object()
+  let obj = @maru.from_json(json).object()
   let name = obj.field("name").string().nonempty().value()
   let age = obj.field("age").int().range(0, 150).value()
   assert_eq(name, "Ada")
@@ -23,6 +23,7 @@ test {
 - 取得・型検証・値検証を分離する
 - エラー伝播には MoonBit の `raise` を使う
 - maru の型は値と path を保持するだけの薄いラッパーにする
+- 最初に `from_json` で JSON を `Value` に包む
 - 最後に `.value()` で素の MoonBit 値へ戻す
 - 未対応の型は `Value::raw()` を使って自前でパースできる
 
@@ -33,7 +34,7 @@ test {
 ```mbt check
 ///|
 test {
-  let value = @maru.value({ "ok": true })
+  let value = @maru.from_json({ "ok": true })
   assert_eq(value.object().field("ok").bool().value(), true)
 }
 ```
@@ -103,7 +104,7 @@ fn User::parse(value : @maru.Value) -> User raise @maru.Invalid {
 }
 ```
 
-トップレベルからは `User::parse(@maru.value(json))` で使う。
+トップレベルからは `User::parse(@maru.from_json(json))` で使う。
 
 ## オブジェクト
 
@@ -123,7 +124,7 @@ Checked[String]
 ```mbt check
 ///|
 test {
-  let obj = @maru.value({ "name": "Ada" }).object()
+  let obj = @maru.from_json({ "name": "Ada" }).object()
   let nickname = obj
     .optional_field("nickname")
     .map(v => v.string().max_len(30).value())
@@ -138,7 +139,7 @@ test {
 ```mbt check
 ///|
 test {
-  let scores = @maru.value({ "scores": [10.0, 99.5] })
+  let scores = @maru.from_json({ "scores": [10.0, 99.5] })
     .object()
     .field("scores")
     .array()
@@ -155,7 +156,7 @@ test {
 ```mbt check
 ///|
 test {
-  let id = @maru.first_of(@maru.value(7), [
+  let id = @maru.first_of(@maru.from_json(7), [
     v => v.string().value(),
     v => v.int().value().to_string(),
   ])
@@ -168,7 +169,7 @@ nullable も同じように書ける。
 ```mbt check
 ///|
 test {
-  let nickname : String? = @maru.first_of(@maru.value(null), [
+  let nickname : String? = @maru.first_of(@maru.from_json(null), [
     v => { v.null(); None },
     v => Some(v.string().value()),
   ])
@@ -182,6 +183,7 @@ test {
 `Checked[T]` には `raw()` を提供しない。
 
 ```text
+from_json(json)    -> Value
 Value.raw()        -> Json
 Checked[T].value() -> T
 ```

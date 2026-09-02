@@ -4,7 +4,7 @@ package "kosei28/maru"
 // Values
 pub fn[T] first_of(Value, Array[(Value) -> T raise Invalid]) -> T raise Invalid
 
-pub fn value(Json) -> Value
+pub fn from_json(Json) -> Value
 
 // Errors
 pub(all) suberror Invalid {
