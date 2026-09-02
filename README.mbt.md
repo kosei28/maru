@@ -16,6 +16,20 @@ test {
 }
 ```
 
+## Install
+
+```bash
+moon add kosei28/maru
+```
+
+Then import it in `moon.pkg`:
+
+```text
+import {
+  "kosei28/maru"
+}
+```
+
 ## Design
 
 - No schema-as-value

@@ -16,6 +16,20 @@ test {
 }
 ```
 
+## インストール
+
+```bash
+moon add kosei28/maru
+```
+
+`moon.pkg` に import する:
+
+```text
+import {
+  "kosei28/maru"
+}
+```
+
 ## 方針
 
 - schema-as-value を持たない
