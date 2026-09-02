@@ -1,0 +1,59 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "kosei28/maru"
+
+// Values
+pub fn[T] first_of(Value, Array[(Value) -> T raise Invalid]) -> T raise Invalid
+
+pub fn value(Json) -> Value
+
+// Errors
+pub(all) suberror Invalid {
+  Invalid(Path, String)
+} derive(Eq)
+pub fn Invalid::to_string(Self) -> String
+pub impl Show for Invalid
+
+// Types and methods
+type Checked[T]
+pub fn Checked::email(Self[String]) -> Self[String] raise Invalid
+pub fn[A, B] Checked::map(Self[Array[A]], (A) -> B raise?) -> Self[Array[B]] raise?
+pub fn[T : Compare + Show] Checked::max(Self[T], T) -> Self[T] raise Invalid
+pub fn[T : Length] Checked::max_len(Self[T], Int) -> Self[T] raise Invalid
+pub fn[T : Compare + Show] Checked::min(Self[T], T) -> Self[T] raise Invalid
+pub fn[T : Length] Checked::min_len(Self[T], Int) -> Self[T] raise Invalid
+pub fn[T : Length] Checked::nonempty(Self[T]) -> Self[T] raise Invalid
+pub fn[T : Compare + Show] Checked::range(Self[T], T, T) -> Self[T] raise Invalid
+pub fn[T] Checked::refine(Self[T], (T) -> Bool, String) -> Self[T] raise Invalid
+pub fn[T] Checked::value(Self[T]) -> T
+
+type Object
+pub fn Object::field(Self, String) -> Value raise Invalid
+pub fn Object::optional_field(Self, String) -> Value?
+
+pub(all) enum Path {
+  Root
+  Field(Path, String)
+  Index(Path, Int)
+} derive(Eq)
+pub fn Path::to_string(Self) -> String
+pub impl Show for Path
+
+type Value
+pub fn Value::array(Self) -> Checked[Array[Self]] raise Invalid
+pub fn Value::bool(Self) -> Checked[Bool] raise Invalid
+pub fn Value::double(Self) -> Checked[Double] raise Invalid
+pub fn Value::int(Self) -> Checked[Int] raise Invalid
+pub fn Value::int64(Self) -> Checked[Int64] raise Invalid
+pub fn Value::null(Self) -> Unit raise Invalid
+pub fn Value::object(Self) -> Object raise Invalid
+pub fn Value::raw(Self) -> Json
+pub fn Value::string(Self) -> Checked[String] raise Invalid
+
+// Type aliases
+
+// Traits
+pub(open) trait Length {
+  fn length(Self) -> Int
+}
+pub impl Length for String
+pub impl[T] Length for Array[T]
