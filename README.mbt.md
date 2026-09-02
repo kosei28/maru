@@ -53,6 +53,8 @@ test {
 }
 ```
 
+Type conversion:
+
 ```text
 value.null()
 value.bool()
@@ -64,40 +66,94 @@ value.array()
 value.object()
 ```
 
-## Type conversion and checks
-
-After converting to a primitive, the result is `Checked[T]` and still carries a path.
-
-```text
-Value
-  ↓ int()
-Checked[Int]
-  ↓ range(...)
-Checked[Int]
-  ↓ value()
-Int
-```
-
-Main checks:
-
-```text
-.nonempty()
-.min_len(n)
-.max_len(n)
-.email()
-
-.min(n)
-.max(n)
-.range(min, max)
-
-.refine(predicate, message)
-```
-
 On failure, maru `raise`s `@maru.Invalid`.
 The message includes the path where it failed.
 
 ```text
 users[2].email: invalid email
+```
+
+## Value checks
+
+```text
+Typed[String]
+  .nonempty()
+  .min_len(n)
+  .max_len(n)
+  .len(n)
+  .starts_with(s)
+  .ends_with(s)
+  .includes(s)
+  .lowercase()
+  .uppercase()
+  .regex(pattern)
+  .email()
+  .url()
+  .uuid()
+  .ipv4()
+  .ipv6()
+  .date()
+  .time()
+  .datetime()
+  .base64()
+  .eq(value)
+  .refine(predicate, message)
+
+Typed[Int]
+  .min(n)
+  .max(n)
+  .range(min, max)
+  .gt(n)
+  .lt(n)
+  .positive()
+  .negative()
+  .nonnegative()
+  .nonpositive()
+  .multiple_of(n)
+  .eq(value)
+  .refine(predicate, message)
+
+Typed[Int64]
+  .min(n)
+  .max(n)
+  .range(min, max)
+  .gt(n)
+  .lt(n)
+  .positive()
+  .negative()
+  .nonnegative()
+  .nonpositive()
+  .multiple_of(n)
+  .eq(value)
+  .refine(predicate, message)
+
+Typed[Double]
+  .min(n)
+  .max(n)
+  .range(min, max)
+  .gt(n)
+  .lt(n)
+  .positive()
+  .negative()
+  .nonnegative()
+  .nonpositive()
+  .multiple_of(n)
+  .eq(value)
+  .refine(predicate, message)
+
+Typed[Bool]
+  .eq(value)
+  .refine(predicate, message)
+
+Typed[Array[T]]
+  .nonempty()
+  .min_len(n)
+  .max_len(n)
+  .len(n)
+  .unique()
+  .map(f)
+  .eq(value)
+  .refine(predicate, message)
 ```
 
 ## Building a struct
@@ -129,7 +185,7 @@ Object
   ↓ field("name")
 Value
   ↓ string()
-Checked[String]
+Typed[String]
 ```
 
 - `field` is required. A missing key is an error
@@ -165,7 +221,7 @@ test {
 
 ## Multiple candidates
 
-`first_of` applies parsers to the same `Value` in order and returns the first success.
+`first_of` applies parsers (`Parser[T]`) to the same `Value` in order and returns the first success.
 
 ```mbt check
 ///|
@@ -194,10 +250,4 @@ test {
 ## Raw JSON
 
 `Value.raw()` is the escape hatch for types maru does not convert directly.
-`Checked[T]` has no `raw()`.
-
-```text
-from_json(json)    -> Value
-Value.raw()        -> Json
-Checked[T].value() -> T
-```
+`Typed[T]` has no `raw()`.

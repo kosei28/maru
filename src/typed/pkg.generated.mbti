@@ -1,0 +1,71 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "kosei28/maru/typed"
+
+import {
+  "kosei28/maru/error",
+}
+
+// Values
+
+// Errors
+
+// Types and methods
+type Typed[T]
+pub fn Typed::base64(Self[String]) -> Self[String] raise @error.Invalid
+pub fn Typed::date(Self[String]) -> Self[String] raise @error.Invalid
+pub fn Typed::datetime(Self[String]) -> Self[String] raise @error.Invalid
+pub fn Typed::email(Self[String]) -> Self[String] raise @error.Invalid
+pub fn Typed::ends_with(Self[String], String) -> Self[String] raise @error.Invalid
+pub fn[T : Eq + Show] Typed::eq(Self[T], T) -> Self[T] raise @error.Invalid
+pub fn[T : Compare + Show] Typed::gt(Self[T], T) -> Self[T] raise @error.Invalid
+pub fn Typed::includes(Self[String], String) -> Self[String] raise @error.Invalid
+pub fn Typed::ipv4(Self[String]) -> Self[String] raise @error.Invalid
+pub fn Typed::ipv6(Self[String]) -> Self[String] raise @error.Invalid
+pub fn[T : Length] Typed::len(Self[T], Int) -> Self[T] raise @error.Invalid
+pub fn Typed::lowercase(Self[String]) -> Self[String] raise @error.Invalid
+pub fn[T : Compare + Show] Typed::lt(Self[T], T) -> Self[T] raise @error.Invalid
+pub fn[A, B] Typed::map(Self[Array[A]], (A) -> B raise?) -> Self[Array[B]] raise?
+pub fn[T : Compare + Show] Typed::max(Self[T], T) -> Self[T] raise @error.Invalid
+pub fn[T : Length] Typed::max_len(Self[T], Int) -> Self[T] raise @error.Invalid
+pub fn[T : Compare + Show] Typed::min(Self[T], T) -> Self[T] raise @error.Invalid
+pub fn[T : Length] Typed::min_len(Self[T], Int) -> Self[T] raise @error.Invalid
+pub fn[T : Remainder + Zero + Eq + Show] Typed::multiple_of(Self[T], T) -> Self[T] raise @error.Invalid
+pub fn[T : Compare + Zero] Typed::negative(Self[T]) -> Self[T] raise @error.Invalid
+pub fn[T] Typed::new(T, @error.Path) -> Self[T]
+pub fn[T : Length] Typed::nonempty(Self[T]) -> Self[T] raise @error.Invalid
+pub fn[T : Compare + Zero] Typed::nonnegative(Self[T]) -> Self[T] raise @error.Invalid
+pub fn[T : Compare + Zero] Typed::nonpositive(Self[T]) -> Self[T] raise @error.Invalid
+pub fn[T : Compare + Zero] Typed::positive(Self[T]) -> Self[T] raise @error.Invalid
+pub fn[T : Compare + Show] Typed::range(Self[T], T, T) -> Self[T] raise @error.Invalid
+pub fn[T] Typed::refine(Self[T], (T) -> Bool, String) -> Self[T] raise @error.Invalid
+pub fn Typed::regex(Self[String], String) -> Self[String] raise @error.Invalid
+pub fn Typed::starts_with(Self[String], String) -> Self[String] raise @error.Invalid
+pub fn Typed::time(Self[String]) -> Self[String] raise @error.Invalid
+pub fn[T : Eq] Typed::unique(Self[Array[T]]) -> Self[Array[T]] raise @error.Invalid
+pub fn Typed::uppercase(Self[String]) -> Self[String] raise @error.Invalid
+pub fn Typed::url(Self[String]) -> Self[String] raise @error.Invalid
+pub fn Typed::uuid(Self[String]) -> Self[String] raise @error.Invalid
+pub fn[T] Typed::value(Self[T]) -> T
+
+// Type aliases
+
+// Traits
+pub(open) trait Length {
+  fn length(Self) -> Int
+}
+pub impl Length for String
+pub impl[T] Length for Array[T]
+
+pub(open) trait Remainder {
+  fn rem(Self, Self) -> Self
+}
+pub impl Remainder for Int
+pub impl Remainder for Int64
+pub impl Remainder for Double
+
+pub(open) trait Zero {
+  fn zero() -> Self
+}
+pub impl Zero for Int
+pub impl Zero for Int64
+pub impl Zero for Double

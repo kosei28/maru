@@ -1,0 +1,35 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "kosei28/maru/json"
+
+import {
+  "kosei28/maru/error",
+  "kosei28/maru/typed",
+}
+
+// Values
+pub fn[T] first_of(Value, Array[(Value) -> T raise @error.Invalid]) -> T raise @error.Invalid
+
+pub fn from_json(Json) -> Value
+
+// Errors
+
+// Types and methods
+type Object
+pub fn Object::field(Self, String) -> Value raise @error.Invalid
+pub fn Object::optional_field(Self, String) -> Value?
+
+type Value
+pub fn Value::array(Self) -> @typed.Typed[Array[Self]] raise @error.Invalid
+pub fn Value::bool(Self) -> @typed.Typed[Bool] raise @error.Invalid
+pub fn Value::double(Self) -> @typed.Typed[Double] raise @error.Invalid
+pub fn Value::int(Self) -> @typed.Typed[Int] raise @error.Invalid
+pub fn Value::int64(Self) -> @typed.Typed[Int64] raise @error.Invalid
+pub fn Value::null(Self) -> Unit raise @error.Invalid
+pub fn Value::object(Self) -> Object raise @error.Invalid
+pub fn Value::raw(Self) -> Json
+pub fn Value::string(Self) -> @typed.Typed[String] raise @error.Invalid
+
+// Type aliases
+pub type Parser[T] = (Value) -> T raise @error.Invalid
+
+// Traits

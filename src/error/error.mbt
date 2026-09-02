@@ -20,6 +20,6 @@ pub impl Show for Invalid with fn output(self, logger) {
 pub extend Invalid with Show::{to_string}
 
 ///|
-fn[T] err(path : Path, message : String) -> T raise Invalid {
+pub fn[T] err(path : Path, message : String) -> T raise Invalid {
   raise Invalid(path, message)
 }

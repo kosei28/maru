@@ -1,0 +1,25 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "kosei28/maru/error"
+
+// Values
+pub fn[T] err(Path, String) -> T raise Invalid
+
+// Errors
+pub(all) suberror Invalid {
+  Invalid(Path, String)
+} derive(Eq)
+pub fn Invalid::to_string(Self) -> String
+pub impl Show for Invalid
+
+// Types and methods
+pub(all) enum Path {
+  Root
+  Field(Path, String)
+  Index(Path, Int)
+} derive(Eq)
+pub fn Path::to_string(Self) -> String
+pub impl Show for Path
+
+// Type aliases
+
+// Traits

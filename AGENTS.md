@@ -21,16 +21,18 @@ Do not add: a Zod-style DSL, schema → type inference, JSON Schema, serializati
 ## Layout
 
 ```text
-moon.mod          # source = "src"
+moon.mod              # source = "src"
 README.mbt.md
-src/
+src/                  # kosei28/maru (public facade)
   moon.pkg
-  *.mbt
-  maru_test.mbt
+  maru.mbt
   pkg.generated.mbti
+  error/              # Path, Invalid
+  json/               # Value, Object, from_json, Parser, first_of
+  typed/              # Typed and value checks
 ```
 
-There is a single package under `src/`. After changing the public API, check the diff of `src/pkg.generated.mbti`.
+Each package keeps its `*_test.mbt` next to the source. After changing the public API, check the diff of `src/pkg.generated.mbti` and the subpackage `pkg.generated.mbti` files.
 
 ## Coding
 

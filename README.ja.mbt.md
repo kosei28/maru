@@ -53,6 +53,8 @@ test {
 }
 ```
 
+型変換:
+
 ```text
 value.null()
 value.bool()
@@ -64,40 +66,94 @@ value.array()
 value.object()
 ```
 
-## 型変換と値検証
-
-プリミティブ型への変換後は `Checked[T]` として path を保持する。
-
-```text
-Value
-  ↓ int()
-Checked[Int]
-  ↓ range(...)
-Checked[Int]
-  ↓ value()
-Int
-```
-
-主な検証:
-
-```text
-.nonempty()
-.min_len(n)
-.max_len(n)
-.email()
-
-.min(n)
-.max(n)
-.range(min, max)
-
-.refine(predicate, message)
-```
-
 失敗時は `@maru.Invalid` を `raise` する。
 メッセージには失敗した位置の path が付く。
 
 ```text
 users[2].email: invalid email
+```
+
+## 値の検証
+
+```text
+Typed[String]
+  .nonempty()
+  .min_len(n)
+  .max_len(n)
+  .len(n)
+  .starts_with(s)
+  .ends_with(s)
+  .includes(s)
+  .lowercase()
+  .uppercase()
+  .regex(pattern)
+  .email()
+  .url()
+  .uuid()
+  .ipv4()
+  .ipv6()
+  .date()
+  .time()
+  .datetime()
+  .base64()
+  .eq(value)
+  .refine(predicate, message)
+
+Typed[Int]
+  .min(n)
+  .max(n)
+  .range(min, max)
+  .gt(n)
+  .lt(n)
+  .positive()
+  .negative()
+  .nonnegative()
+  .nonpositive()
+  .multiple_of(n)
+  .eq(value)
+  .refine(predicate, message)
+
+Typed[Int64]
+  .min(n)
+  .max(n)
+  .range(min, max)
+  .gt(n)
+  .lt(n)
+  .positive()
+  .negative()
+  .nonnegative()
+  .nonpositive()
+  .multiple_of(n)
+  .eq(value)
+  .refine(predicate, message)
+
+Typed[Double]
+  .min(n)
+  .max(n)
+  .range(min, max)
+  .gt(n)
+  .lt(n)
+  .positive()
+  .negative()
+  .nonnegative()
+  .nonpositive()
+  .multiple_of(n)
+  .eq(value)
+  .refine(predicate, message)
+
+Typed[Bool]
+  .eq(value)
+  .refine(predicate, message)
+
+Typed[Array[T]]
+  .nonempty()
+  .min_len(n)
+  .max_len(n)
+  .len(n)
+  .unique()
+  .map(f)
+  .eq(value)
+  .refine(predicate, message)
 ```
 
 ## struct の構築
@@ -129,7 +185,7 @@ Object
   ↓ field("name")
 Value
   ↓ string()
-Checked[String]
+Typed[String]
 ```
 
 - `field` は必須フィールド。キーが無ければエラー
@@ -165,7 +221,7 @@ test {
 
 ## 複数の候補
 
-`first_of` は同じ `Value` に複数の parser を順番に適用し、最初に成功した値を返す。
+`first_of` は同じ `Value` に複数の parser (`Parser[T]`) を順番に適用し、最初に成功した値を返す。
 
 ```mbt check
 ///|
@@ -194,10 +250,4 @@ test {
 ## 生の JSON
 
 `Value.raw()` は maru が直接対応していない型を自前でパースするための escape hatch。
-`Checked[T]` には `raw()` を提供しない。
-
-```text
-from_json(json)    -> Value
-Value.raw()        -> Json
-Checked[T].value() -> T
-```
+`Typed[T]` には `raw()` を提供しない。
